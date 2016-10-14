@@ -19,6 +19,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.annotation.NonNull;
 
 import com.google.android.gms.samples.vision.ocrreader.ui.camera.GraphicOverlay;
 import com.google.android.gms.vision.text.Text;
@@ -80,8 +81,13 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
      * @return True if the provided point is contained within this graphic's bounding box.
      */
     public boolean contains(float x, float y) {
-        // TODO: Check if this graphic's text contains this point.
-        return false;
+        if (mText == null) {
+            return false;
+        }
+
+        // Returns the bounding box around the TextBlock.
+        RectF rect = getBoundingBox();
+        return (rect.left < x && rect.right > x && rect.top < y && rect.bottom > y);
     }
 
     /**
@@ -95,11 +101,7 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
         }
 
         // Draws the bounding box around the TextBlock.
-        RectF rect = new RectF(mText.getBoundingBox());
-        rect.left = translateX(rect.left);
-        rect.top = translateY(rect.top);
-        rect.right = translateX(rect.right);
-        rect.bottom = translateY(rect.bottom);
+        RectF rect = getBoundingBox();
         canvas.drawRect(rect, sRectPaint);
 
         // Break the text into multiple lines and draw each one according to its own bounding box.
@@ -109,5 +111,17 @@ public class OcrGraphic extends GraphicOverlay.Graphic {
             float bottom = translateY(currentText.getBoundingBox().bottom);
             canvas.drawText(currentText.getValue(), left, bottom, sTextPaint);
         }
+    }
+
+    @NonNull
+    private RectF getBoundingBox() {
+        RectF rect = new RectF(mText.getBoundingBox());
+
+        rect.left = translateX(rect.left);
+        rect.top = translateY(rect.top);
+        rect.right = translateX(rect.right);
+        rect.bottom = translateY(rect.bottom);
+
+        return rect;
     }
 }
