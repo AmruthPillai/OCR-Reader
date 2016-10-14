@@ -13,7 +13,7 @@ An Android Application that will allow you to identify the text seen from your p
 
 ## Downloads
 **Download the latest release of the app here:**  
-https://github.com/AmruthPillai/OCR-Reader/releases/download/v1.0/ocr-reader-v1.0.apk
+https://github.com/AmruthPillai/OCR-Reader/releases/download/v1.0/app-release.apk
 
 ---
 
